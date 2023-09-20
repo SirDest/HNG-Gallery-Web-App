@@ -15,7 +15,13 @@ import img13 from "./Images/img13.jpg";
 import img14 from "./Images/img14.jpg";
 import img15 from "./Images/img15.jpg";
 
-import { DndContext, closestCenter } from "@dnd-kit/core";
+import {
+  DndContext,
+  MouseSensor,
+  TouchSensor,
+  closestCenter,
+  useSensor,
+} from "@dnd-kit/core";
 import {
   SortableContext,
   arrayMove,
@@ -138,10 +144,22 @@ const Images = () => {
       </div>
     );
   };
+  const mouse = useSensor(MouseSensor),
+    touch = useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    });
+  const sensors = useSensor(mouse, touch);
 
   return (
     <div className="grid gap-2 container w-full h-fit p-10 m-auto lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3">
-      <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={onDragEnd}
+        sensors={sensors}
+      >
         <SortableContext
           items={imagesDet}
           strategy={verticalListSortingStrategy}
