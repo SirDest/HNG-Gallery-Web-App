@@ -21,6 +21,7 @@ import {
   TouchSensor,
   closestCenter,
   useSensor,
+  useSensors,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -144,15 +145,20 @@ const Images = () => {
       </div>
     );
   };
-  const mouse = useSensor(MouseSensor),
-    touch = useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 250,
-        tolerance: 5,
-      },
-    });
-  const sensors = useSensor(mouse, touch);
 
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 10,
+    },
+  });
+  const touchSensor = useSensor(TouchSensor, {
+    // Press delay of 250ms, with tolerance of 5px of movement
+    activationConstraint: {
+      delay: 250,
+      tolerance: 5,
+    },
+  });
+  const sensors = useSensors(mouseSensor, touchSensor);
   return (
     <div className="grid gap-2 container w-full h-fit p-10 m-auto lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3">
       <DndContext
